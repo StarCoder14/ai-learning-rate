@@ -1,0 +1,18 @@
+<section id="sequence" data-transition="fade" style="background:#F7F6F2;color:#14213D;font-family:'Noto Sans KR', 'Malgun Gothic', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-size:64px;font-weight:700;line-height:1.15;color:#14213D">학습 규칙은 등비수열이 된다</h2>
+<div style="flex:1;display:flex;gap:48px;align-items:stretch">
+<div style="flex:3;display:flex;flex-direction:column;justify-content:center;gap:28px;background:#FCFBF8;padding:48px;border:2px solid #E2E0D9;border-radius:20px">
+<p style="font-size:28px;font-weight:700;color:#1F63B8">기울기 2a(n)을 학습 규칙에 넣으면</p>
+<p style="font-size:44px;font-family:'JetBrains Mono', 'Courier New', monospace;line-height:1.5;color:#14213D">a(n+1) = a(n) − r × 2a(n)</p>
+<p style="font-size:44px;font-family:'JetBrains Mono', 'Courier New', monospace;line-height:1.5;color:#14213D">&#160;&#160;&#160;&#160;&#160;&#160;&#160;= (1 − 2r) × a(n)</p>
+<p style="font-size:36px;line-height:1.5;color:#4A5568">→ 공비가 <b style="color:#14213D">1 − 2r</b>인 등비수열</p>
+<p style="font-size:28px;font-weight:700;color:#1F63B8">등비수열이 0으로 수렴할 조건: |공비| &lt; 1</p>
+<p style="font-size:44px;font-family:'JetBrains Mono', 'Courier New', monospace;line-height:1.5;color:#14213D">−1 &lt; 1 − 2r &lt; 1</p>
+</div>
+<div style="flex:2;display:flex;flex-direction:column;justify-content:center;gap:24px;background:#14213D;padding:40px;border-radius:20px">
+<p style="font-size:32px;font-weight:700;color:#F0A35E">이론 예측</p>
+<p style="font-size:100px;font-weight:700;font-family:'JetBrains Mono', 'Courier New', monospace;color:#F7F6F2">0 &lt; r &lt; 1</p>
+</div>
+</div>
+<aside>이 기울기를 학습 규칙에 넣으면 a(n+1) = a(n) − r × 2a(n), 정리하면 (1 − 2r) 곱하기 a(n)입니다. 공비가 1 − 2r인 등비수열이 됩니다. 등비수열이 0으로 수렴하려면 공비의 절댓값이 1보다 작아야 하니까, 부등식을 풀면 0 &lt; r &lt; 1이 나옵니다. 학습률이 0과 1 사이여야 학습에 성공한다는 예측입니다. 이제 이 예측이 맞는지 직접 보겠습니다. (40초)</aside>
+</section>

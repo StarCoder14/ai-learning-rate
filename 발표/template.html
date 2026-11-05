@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<!-- 인터넷이 되면 Noto Sans KR, 안 되면 맑은 고딕으로 보임 -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0B1222; }
+/* 한글이 "기울/기"처럼 단어 중간에서 끊기지 않고 띄어쓰기에서만 줄바꿈되게 함 */
+body { font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif; word-break: keep-all; }
+
+/* 슬라이드는 항상 1920×1080으로 그리고, 창 크기에 맞게 통째로 확대/축소함 */
+#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; overflow: hidden; }
+#stage > section { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+#stage > section:not(.active) { display: none !important; }
+#stage > section.active { animation: appear 0.35s ease; }
+@keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+
+aside { display: none; }
+b { font-weight: 700; }
+img { display: block; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 0.35em 0.6em; text-align: left; border-bottom: 1px solid #D8D5CC; }
+th { font-weight: 700; }
+
+#progress { position: fixed; left: 0; bottom: 0; height: 4px; background: #E8833A; transition: width 0.3s; }
+#counter { position: fixed; right: 16px; bottom: 12px; color: #8C96AB; font: 14px 'Malgun Gothic', sans-serif; }
+#notes { position: fixed; left: 0; right: 0; bottom: 0; max-height: 35%; overflow: auto; padding: 16px 24px 28px;
+         background: rgba(11, 18, 34, 0.94); color: #F7F6F2; font: 20px/1.6 'Malgun Gothic', sans-serif; display: none; }
+#notes.shown { display: block; }
+#help { position: fixed; left: 50%; top: 24px; transform: translateX(-50%); padding: 12px 24px; border-radius: 24px;
+        background: rgba(11, 18, 34, 0.88); color: #F7F6F2; font: 16px 'Malgun Gothic', sans-serif; white-space: nowrap; transition: opacity 0.6s; }
+#help.hidden { opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+{{SLIDES}}
+</div>
+<div id="progress"></div>
+<div id="counter"></div>
+<div id="notes"></div>
+<div id="help">→ 다음 · ← 이전 · F 전체화면 · N 노트 보기 · P 발표자 창 · H 도움말</div>
+
+<script>
+const stage = document.getElementById('stage');
+const slides = Array.from(stage.querySelectorAll(':scope > section'));
+const counter = document.getElementById('counter');
+const progress = document.getElementById('progress');
+const notes = document.getElementById('notes');
+const help = document.getElementById('help');
+let currentIndex = 0;
+let presenterWindow = null;
+let startTime = null;
+
+function fitStageToWindow() {
+  const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+}
+
+function notesOf(index) {
+  const aside = slides[index] && slides[index].querySelector('aside');
+  return aside ? aside.textContent.trim() : '';
+}
+
+function titleOf(index) {
+  const heading = slides[index] && slides[index].querySelector('h1, h2');
+  return heading ? heading.textContent.trim() : '(마지막 슬라이드)';
+}
+
+function restartGifs(slide) {
+  // GIF는 숨겨져 있어도 계속 돌아서, 슬라이드에 들어올 때 처음부터 다시 틀어 줌
+  slide.querySelectorAll('img').forEach(image => {
+    if (!image.src.startsWith('data:image/gif')) return;
+    const source = image.src;
+    image.src = '';
+    image.src = source;
+  });
+}
+
+function showSlide(index) {
+  currentIndex = Math.max(0, Math.min(slides.length - 1, index));
+  slides.forEach((slide, i) => slide.classList.toggle('active', i === currentIndex));
+  restartGifs(slides[currentIndex]);
+  counter.textContent = `${currentIndex + 1} / ${slides.length}`;
+  progress.style.width = `${(currentIndex + 1) / slides.length * 100}%`;
+  notes.textContent = notesOf(currentIndex);
+  history.replaceState(null, '', '#' + (currentIndex + 1));
+  updatePresenter();
+}
+
+function toggleFullscreen() {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen();
+}
+
+function handleKey(event) {
+  const key = event.key;
+  if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(key)) showSlide(currentIndex + 1);
+  else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(key)) showSlide(currentIndex - 1);
+  else if (key === 'Home') showSlide(0);
+  else if (key === 'End') showSlide(slides.length - 1);
+  else if (key === 'f' || key === 'F') toggleFullscreen();
+  else if (key === 'n' || key === 'N') notes.classList.toggle('shown');
+  else if (key === 'p' || key === 'P') openPresenter();
+  else if (key === 'h' || key === 'H') help.classList.toggle('hidden');
+  else return;
+  event.preventDefault();
+}
+
+// 발표자 창: 노트북 화면에 띄워 두고 대본, 다음 슬라이드, 경과 시간을 봄
+const PRESENTER_PAGE = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>발표자 창</title>
+<style>body{margin:0;padding:32px;background:#14213D;color:#F7F6F2;font-family:'Malgun Gothic',sans-serif}
+#top{display:flex;justify-content:space-between;font-size:28px;font-weight:700}#timer{color:#F0A35E}
+#notes{margin-top:24px;font-size:26px;line-height:1.7;white-space:pre-wrap}
+#next{margin-top:28px;font-size:20px;color:#C9D2E3}button{font-size:16px;margin-left:12px}</style></head>
+<body><div id="top"><span id="number"></span><span><span id="timer">0:00</span><button id="reset">시간 다시</button></span></div>
+<div id="notes"></div><div id="next"></div></body></html>`;
+
+function openPresenter() {
+  presenterWindow = window.open('', 'presenter', 'width=1000,height=720');
+  if (!presenterWindow) { alert('팝업이 막혀 있어요. 주소창 오른쪽에서 팝업을 허용해 주세요.'); return; }
+  presenterWindow.document.open();
+  presenterWindow.document.write(PRESENTER_PAGE);
+  presenterWindow.document.close();
+  presenterWindow.document.addEventListener('keydown', handleKey);
+  presenterWindow.document.getElementById('reset').onclick = () => { startTime = Date.now(); };
+  startTime = Date.now();
+  updatePresenter();
+}
+
+function updatePresenter() {
+  if (!presenterWindow || presenterWindow.closed) return;
+  const page = presenterWindow.document;
+  page.getElementById('number').textContent = `${currentIndex + 1} / ${slides.length}  ${titleOf(currentIndex)}`;
+  page.getElementById('notes').textContent = notesOf(currentIndex);
+  page.getElementById('next').textContent = '다음: ' + titleOf(currentIndex + 1);
+}
+
+function updateTimer() {
+  if (!presenterWindow || presenterWindow.closed || startTime === null) return;
+  const seconds = Math.floor((Date.now() - startTime) / 1000);
+  const text = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+  presenterWindow.document.getElementById('timer').textContent = text;
+}
+
+document.addEventListener('keydown', handleKey);
+stage.addEventListener('click', () => showSlide(currentIndex + 1));
+window.addEventListener('resize', fitStageToWindow);
+// 주소 끝을 #7처럼 바꾸면 그 슬라이드로 바로 감 (질문 시간에 특정 장으로 돌아갈 때)
+window.addEventListener('hashchange', () => showSlide((parseInt(location.hash.slice(1), 10) || 1) - 1));
+setInterval(updateTimer, 1000);
+setTimeout(() => help.classList.add('hidden'), 4000);
+
+fitStageToWindow();
+showSlide((parseInt(location.hash.slice(1), 10) || 1) - 1);
+</script>
+</body>
+</html>

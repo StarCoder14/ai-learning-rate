@@ -1,0 +1,15 @@
+<section id="stage3" data-transition="fade" style="background:#F7F6F2;color:#14213D;font-family:'Noto Sans KR', 'Malgun Gothic', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:28px">
+<h2 style="font-size:64px;font-weight:700;line-height:1.15;color:#14213D">변수가 두 개면? x² + b·y²</h2>
+<img src="/_blob/61252280f9911b4dd60ab7c8a81572a1" alt="b = 1, 4, 10일 때 등고선 위의 학습 경로. b가 클수록 지그재그가 심해진다" style="width:1352px;height:520px;object-fit:contain;background:#FCFBF8;border-radius:16px">
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FCFBF8;padding:32px;border:2px solid #E2E0D9;border-radius:20px">
+<h3 style="font-size:36px;font-weight:700;color:#B8521A">뾰족한 축이 상한을 정함</h3>
+<p style="font-size:30px;color:#4A5568">r &lt; 1/max(a, b), 다섯 경우 모두 일치</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FCFBF8;padding:32px;border:2px solid #E2E0D9;border-radius:20px">
+<h3 style="font-size:36px;font-weight:700;color:#1F63B8">완만한 축이 속도를 정함</h3>
+<p style="font-size:30px;color:#4A5568">r = 0.03이면 b와 상관없이 112번째 항</p>
+</div>
+</div>
+<aside>실제 AI는 변수가 아주 많습니다. 그래서 변수가 두 개인 x² + b·y²를 봤습니다. x와 y가 각각 등비수열이 되어 동시에 움직입니다. 문제는 두 방향의 뾰족함이 다르다는 것입니다. 학습률은 뾰족한 쪽에 맞춰 작게 써야 하고, 그 작은 학습률로는 완만한 쪽이 느리게 도착합니다. 그림처럼 경로가 지그재그가 되고, r = 0.03에서는 b를 바꿔도 전부 112번째 항이 걸렸습니다. 완만한 축이 전체 속도를 정하는 겁니다. 그럼 어떻게 빠르게 할 수 있을까요? (50초)</aside>
+</section>

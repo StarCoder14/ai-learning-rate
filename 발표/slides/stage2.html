@@ -1,0 +1,20 @@
+<section id="stage2" data-transition="fade" style="background:#F7F6F2;color:#14213D;font-family:'Noto Sans KR', 'Malgun Gothic', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-size:64px;font-weight:700;line-height:1.15;color:#14213D">함수가 뾰족하면? a(x − p)² + q</h2>
+<div style="flex:1;display:flex;gap:48px;align-items:center">
+<div style="flex:1;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#14213D;padding:40px;border-radius:20px">
+<p style="font-size:28px;font-weight:700;color:#F0A35E">이론 예측</p>
+<p style="font-size:72px;font-weight:700;font-family:'JetBrains Mono', 'Courier New', monospace;color:#F7F6F2">0 &lt; r &lt; 1/a</p>
+</div>
+<table style="font-size:34px;color:#14213D">
+<tr style="background:#E2E0D9"><th style="width:20%">a</th><th style="width:40%">이론 상한 1/a</th><th style="width:40%">실험 경계</th></tr>
+<tr><td>0.5</td><td>2</td><td>2.0에서 진동</td></tr>
+<tr style="background:#FCFBF8"><td>1</td><td>1</td><td>1.0에서 진동</td></tr>
+<tr><td>2</td><td>0.5</td><td>0.5에서 진동</td></tr>
+<tr style="background:#FCFBF8"><td>5</td><td>0.2</td><td>0.2에서 진동</td></tr>
+</table>
+</div>
+<img src="/_blob/5171c22f26414db9873776a2dae11703" alt="a 값 네 가지에 대해 학습률별 수렴, 진동, 발산 판정과 이론 상한 1/a를 함께 그린 그림" style="width:1000px;height:533px;object-fit:contain;background:#FCFBF8;border-radius:16px">
+</div>
+<aside>다음은 함수 모양을 바꿨습니다. a(x − p)² + q에서 같은 방법으로 구하면 0 &lt; r &lt; 1/a가 나옵니다. 그래프가 뾰족할수록 안전한 학습률이 작아진다는 뜻입니다. a를 네 가지로 바꿔 실험했는데, 이번에는 공식을 쓰지 않고 학습 규칙을 200번 직접 반복해서 판정했습니다. 네 경우 모두 경계가 이론과 같았고, 경계에서는 또 진동이 나왔습니다. 꼭짓점 위치 p, q를 바꿔도 결과는 그대로였습니다. (30초)</aside>
+</section>

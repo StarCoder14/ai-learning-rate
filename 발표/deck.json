@@ -1,0 +1,19 @@
+{
+  "v": 4,
+  "createdOnFiles": {"v": 1, "at": "2026-11-04T09:00:00Z"},
+  "lists": "css",
+  "title": "AI 학습률 발표",
+  "cover": "cover",
+  "order": ["cover", "question", "rule", "slope", "sequence", "demo", "table1", "stage2", "stage3", "stage4", "stage4b", "stage5", "conclusion", "thanks"],
+  "sections": {
+    "intro": {"description": "탐구 동기와 질문", "start": "cover"},
+    "core": {"description": "1단계: 판별식으로 기울기를 구하고 학습을 등비수열로 바꿔 0 < r < 1을 유도하고 확인함", "start": "rule"},
+    "extend": {"description": "2~5단계: 함수 모양, 변수 개수, 관성, 로지스틱으로 넓혀 봄", "start": "stage2"},
+    "end": {"description": "결론과 한계", "start": "conclusion"}
+  },
+  "faces": {
+    "noto-sans-kr": {"family": "Noto Sans KR", "href": "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap"},
+    "jetbrains-mono": {"family": "JetBrains Mono", "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap"}
+  },
+  "designSystems": []
+}

@@ -1,0 +1,26 @@
+<section id="rule" data-transition="fade" style="background:#F7F6F2;color:#14213D;font-family:'Noto Sans KR', 'Malgun Gothic', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-size:64px;font-weight:700;line-height:1.15;color:#14213D">학습은 산을 내려가는 것</h2>
+<div style="flex:1;display:flex;gap:64px;align-items:center">
+<div style="flex:1;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:36px;line-height:1.5;color:#4A5568">목표는 그래프의 가장 낮은 점(최솟값)을 찾는 것. 지금 위치의 기울기를 보고 내리막 쪽으로 한 걸음 움직인다.</p>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFBF8;padding:40px;border:2px solid #E2E0D9;border-radius:20px">
+<p style="font-size:28px;font-weight:700;color:#1F63B8">학습 규칙</p>
+<p style="font-size:44px;font-weight:700;line-height:1.4;color:#14213D">다음 값 = 지금 값 − r × (지금 위치의 기울기)</p>
+<p style="font-size:32px;color:#4A5568">r = 학습률: 한 걸음의 크기</p>
+</div>
+<p style="font-size:36px;line-height:1.5;color:#4A5568">최솟값에서는 기울기가 0 → 뺄 것이 없어 멈춘다. <b style="color:#14213D">수렴 = 정답 도착</b></p>
+</div>
+<svg aria-label="포물선 y = x² 위의 점에서 접선을 따라 최솟값 쪽으로 한 걸음 내려가는 그림" width="720" height="540" viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+<line x1="20" y1="440" x2="620" y2="440" stroke="#C9C6BC" stroke-width="2"/>
+<line x1="320" y1="20" x2="320" y2="460" stroke="#C9C6BC" stroke-width="2"/>
+<path d="M40 40 Q320 840 600 40" fill="none" stroke="#14213D" stroke-width="5"/>
+<line x1="436" y1="404" x2="596" y2="84" stroke="#E8833A" stroke-width="4" stroke-dasharray="12 8"/>
+<path d="M516 244 Q478 318 444 364" fill="none" stroke="#1F63B8" stroke-width="5"/>
+<path d="M432 378 L436 352 L456 366 Z" fill="#1F63B8"/>
+<circle cx="516" cy="244" r="16" fill="#E8833A"/>
+<circle cx="438" cy="369" r="12" fill="#1F63B8"/>
+<circle cx="320" cy="440" r="14" fill="#14213D"/>
+</svg>
+</div>
+<aside>AI의 학습은 산을 내려가는 것과 비슷합니다. 목표는 그래프에서 가장 낮은 점, 즉 최솟값을 찾는 것입니다. 지금 서 있는 곳의 기울기를 보고 내리막 쪽으로 한 걸음 움직입니다. 이 한 걸음의 크기를 정하는 값이 학습률 r입니다. 식으로 쓰면, 다음 값은 지금 값에서 r 곱하기 기울기를 뺀 것입니다. 최솟값에서는 기울기가 0이라 뺄 것이 없으니 멈춥니다. 그래서 이 수열이 수렴하면 정답에 도착한 것이고, 학습에 성공한 것입니다. (40초)</aside>
+</section>
